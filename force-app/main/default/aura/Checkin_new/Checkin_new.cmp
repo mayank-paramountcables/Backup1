@@ -1,0 +1,55 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName,force:lightningQuickActionWithoutHeader"
+                controller="CO_CheckInOutCT"
+                access="global">
+    
+    <!-- attributes -->
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="curLatitude" type="Decimal"/>
+    <aura:attribute name="curLongitude" type="Decimal"/>
+    <aura:attribute name="mapMarkers" type="Object"/>
+    <aura:attribute name="lastOpenVisitId" type="String"/>
+    <aura:attribute name="isBtnDisabled" type="Boolean" default="true"/>
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- navigation -->
+    <lightning:navigation aura:id="navService"/>
+    
+    <!-- modal title -->
+    <header class="slds-modal__header">
+        <aura:if isTrue="{!v.lastOpenVisitId == null}" >
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Check-in</h2>
+                <aura:set attribute="else">   
+                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Check-out</h2>
+            </aura:set>
+        </aura:if>
+    </header>
+    
+    <!-- map component -->
+    <aura:if isTrue="{!v.mapMarkers.length > 0}" >
+        <lightning:map 
+                       mapMarkers="{!v.mapMarkers}" 
+                       zoomLevel="16"/>
+        <aura:set attribute="else">
+            <div class="spinnerHolder">
+                <lightning:spinner alternativeText="Loading" size="medium" />
+            </div>
+        </aura:set>
+    </aura:if>
+    
+    <!-- footer buttons -->
+    <footer class="slds-modal__footer">
+        <lightning:button class="buttons" 
+                          label="Cancel"
+                          title="Cancel"
+                          onclick="{! c.handleCancel }"/>
+        <lightning:button class="buttons"
+                          variant="brand"
+                          label="Confirm"
+                          title="Confirm"
+                          onclick="{! c.handleConfirm }"
+                          disabled="{!v.isBtnDisabled}"/>
+    </footer>
+</aura:component>

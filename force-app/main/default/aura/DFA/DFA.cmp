@@ -1,0 +1,42 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="AddMultipleRowCtrl">
+	<aura:attribute name="lstDFA" type="List"/>   
+	<aura:attribute name="rowIndex" type="String"/>
+    <aura:attribute name="lsttypevalue" type="List"/> 
+    <aura:attribute name="Ishide" type="boolean" description=""/> 
+    <aura:attribute name="IshideAddButton" type="boolean" description=""/> 
+      
+	<aura:iteration items="{!v.lstDFA}" var="item" indexVar="index">
+		<tr class="slds-text-title_caps" data-row-index="{!index}">
+			
+			<td> 
+				<lightning:input type="text" label="" value="{!item.Name_Father_Name_Address__c}" disabled="{!v.Ishide}"/>
+			</td>
+			<td>
+				<lightning:select label="" value="{!item.Type__c}" disabled="{!v.Ishide}">
+					<aura:iteration items="{!v.lsttypevalue}" var="val">
+						<option value="{!val}"> {!val}</option>
+					</aura:iteration>
+				</lightning:select>
+			</td>
+			<td>
+				<lightning:input type="text" label="" value="{!item.Pan_No__c}" maxlength="10" disabled="{!v.Ishide}"/>
+			</td>
+			<td>
+				<lightning:input type="text" label="" value="{!item.Aadhar_No__c}" maxlength="12" disabled="{!v.Ishide}"/>
+			</td>
+			<td>
+			<aura:if isTrue="{!!v.Ishide}">
+				<div class="slds-truncate" title="Action">
+					<aura:if isTrue="{!index != 0 || v.lstDFA.length > 1}">
+						<lightning:buttonIcon value="{!index}" alternativeText="Remove Row" variant="border-filled"  iconName="utility:close"  onclick="{!c.removeRow}" class="AlignCenter" disabled="{!v.Ishide}"/>
+					</aura:if>
+					<aura:if isTrue="{!v.lstDFA.length == index+1}">
+						<lightning:buttonIcon value="index" alternativeText="Add Row" variant="border-filled"  iconName="utility:add"  onclick="{!c.AddNewRow}" class="AlignCenter" disabled="{!v.Ishide}"/>
+					</aura:if>
+				</div>
+			</aura:if>
+			</td>
+			
+		</tr>
+	</aura:iteration>
+</aura:component>

@@ -1,0 +1,467 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" controller="ViewApplicationCtrl">
+	<aura:attribute name="showSpinner" type="boolean" description="" default="false"/> 
+    <aura:attribute name="recordId" type="String" default=""/>
+    <aura:attribute name="objWrap" type="object" />
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:attribute name="TypeConstitution" type="String[]" />
+    <aura:attribute name="lstType" type="String[]" />
+	<aura:attribute name="lstTypeofBusinessPlace" type="String[]" />
+	<aura:attribute name="lstBusinessPlaceType" type="String[]" />
+	<aura:attribute name="lstProductType" type="List" />
+	<aura:attribute name="selectedProductType" type="List" default="[]" />
+    <aura:attribute name="atrAppId" type="string" default=""/>
+
+    <aura:html tag="style">
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }       
+        .slds-modal__content{
+            overflow-y:hidden !important;
+            height:unset !important;
+            max-height:unset !important;
+        }
+        .slds-modal__container{
+        	margin: 0 auto;
+            width: 90%;
+            max-width: 75rem;
+            min-width: 65rem;
+        }
+		.slds-m-vertical--large{
+			margin-top :0rem;
+		}
+    </aura:html>
+	<div class="slds-has-divider--top slds-m-vertical--large slds-grid--pull-padded-medium"  >
+		<aura:if isTrue="{!v.showSpinner}">
+			<lightning:spinner alternativeText="Loading" variant="brand" />
+		</aura:if>
+		<div >
+			<h3 class="slds-section-title--divider slds-m-left_medium" style= "margin-left: 3px; margin-right: 3px;"> Information</h3>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:select label="Constitution" value="{!v.objWrap.objApp.Constitution__c}" disabled="true">
+						<option value="{!v.objWrap.objApp.Constitution__c}"> {!v.objWrap.objApp.Constitution__c}</option>
+						<aura:iteration items="{!v.TypeConstitution}" var="val">
+						    <aura:if isTrue="{!val != v.objWrap.objApp.Constitution__c}">
+								<option value="{!val}"> {!val}</option>
+							</aura:if>
+						</aura:iteration>
+					</lightning:select>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Other Constitution" value="{!v.objWrap.objApp.Other_Constitution__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="PAN No." value="{!v.objWrap.objApp.PAN_No__c}" maxlength="10" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="TIN/GST No." value="{!v.objWrap.objApp.TIN_GST_No__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="Date" label="Date of Estl." value="{!v.objWrap.objApp.Date_of_Estl__c}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					
+				</div>
+			</div>
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;"> Contact Details</h3>
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large" >
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Contact Person First Name" value="{!v.objWrap.objApp.Contact_Person_First_Name__c}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Contact Person Last Name" value="{!v.objWrap.objApp.Contact_Person_Last_Name__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Mobile No." value="{!v.objWrap.objApp.Mobile_No__c}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Tel No." value="{!v.objWrap.objApp.Tel_No__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Email Id" value="{!v.objWrap.objApp.Email_Id__c}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="Date" label="Date of Birth" value="{!v.objWrap.objApp.Date_of_Birth__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;">Address as per GST reg.</h3>
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large" >
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Street" value="{!v.objWrap.objApp.Street__c}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="City" value="{!v.objWrap.objApp.City__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="State" value="{!v.objWrap.objApp.State__c}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:input type="text" label="Country" value="{!v.objWrap.objApp.Country__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12 ">
+					<lightning:input type="text" label="Postal Code" value="{!v.objWrap.objApp.Postal_Code__c}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					
+				</div>
+			</div>
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;"> PARTICULARS OF PROPRIETOR/PARTNERS/DIRECTORS</h3>
+            <br/>
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-left_medium slds-m-right_medium" style="width: 98%;"> 
+				<thead>
+				   <tr class="slds-text-title_caps">
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Name">Name</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Prop/partner/Di rector/Other">Prop/partner/Di rector/Other</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Pan No.">Pan No.</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Aadhar No.">Aadhar No.</div>
+						</th>
+					</tr>
+				</thead>   
+				<tbody >       
+					<c:DFA aura:id="CmpProductdetailsId" lstDFA="{!v.objWrap.lstDFA}" lsttypevalue="{!v.lstType}" Ishide="true"/>
+				</tbody>
+			</table>
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;"> BANK ACCOUNT DETAILS</h3>
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-left_medium slds-m-right_medium" style="width: 98%;"> 
+				<thead>
+				   <tr class="slds-text-title_caps">
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Bank Name &amp; Branch">Bank Name &amp; Branch</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Account No.">Account No.</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Account Type">Account Type</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="IFSC Code">IFSC Code</div>
+						</th>
+					</tr>
+				</thead>   
+				<tbody>       
+					<c:DFABankAccount aura:id="CmpDFABankAccountId" lstDFABank="{!v.objWrap.lstDFABankAccount}" Ishide="true"/>
+				</tbody>
+			</table>
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;"> OTHER BUSINESS PLACES (if any)</h3>
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-left_medium slds-m-right_medium" style="width: 98%;"> 
+				<thead>
+				   <tr class="slds-text-title_caps">
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Type Godown/Shop">Type Godown/Shop</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Address">Address</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Year of Estl.">Year of Estl.</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Owned/Rented">Owned/Rented</div>
+						</th>
+					</tr>
+				</thead>   
+				<tbody>       
+					<c:DFAOther aura:id="CmpDFABankAccountId" lstDFAOther="{!v.objWrap.lstDFAOtherBusinessPlace}" lstTypeofBusinessPlacevalue="{!v.lstTypeofBusinessPlace}" lstBusinessPlaceTypevalue="{!v.lstBusinessPlaceType}" Ishide="true"/>
+				</tbody>
+			</table>
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;"> DETAILS OF GROUP ENTITIES (if any)</h3>
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-left_medium slds-m-right_medium" style="width: 98%;"> 
+				<thead>
+				   <tr class="slds-text-title_caps">
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Name">Name</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Nature of Business">Nature of Business</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Relation">Relation</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Turnover">Turnover</div>
+						</th>
+					</tr>
+				</thead>   
+				<tbody>       
+					<c:DFAGroupEntities aura:id="CmpDFABankAccountId" lstDFAGroupEntities="{!v.objWrap.lstDFAGroupEntities}" Ishide="true"/>
+				</tbody>
+			</table>
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;"> MAJOR PRODUCTS HANDLED</h3>
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-left_medium slds-m-right_medium" style="width: 98%;"> 
+				<thead>
+				   <tr class="slds-text-title_caps">
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Company/Brand">Company/Brand</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Products">Products</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Experience(Yrs)">Experience(Yrs)</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Turnover Rs lacs">Turnover Rs lacs</div>
+						</th>
+					</tr>
+				</thead>   
+				<tbody>       
+					<c:DFAProducts aura:id="CmplstDFAOtherProductsId" lstDFAProducts="{!v.objWrap.lstDFAOtherProducts}" Ishide="true"/>
+				</tbody>
+			</table>
+			
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;">BRIEF ABOUT MAIN DEALERS</h3>
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-left_medium slds-m-right_medium" style="width: 98%;"> 
+				<thead>
+				   <tr class="slds-text-title_caps">
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Name of dealers">Name of dealers</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Products">Products</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Location">Location</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Sale to dealer Rs Lacs">Sale to dealer Rs Lacs</div>
+						</th>
+					</tr>
+				</thead>   
+				<tbody>       
+					<c:DFAMainDealers aura:id="CmpDFABankAccountId" lstDFAMainDealers="{!v.objWrap.lstDFAMainDealers}" Ishide="true"/>
+				</tbody>
+			</table>
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_small" style= "margin-left: 3px; margin-right: 3px;">BRIEF ABOUT MAIN CUSTOMERS</h3>
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-left_medium slds-m-right_medium" style="width: 98%;"> 
+				<thead>
+				   <tr class="slds-text-title_caps">
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Name">Name </div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Nature of Business">Nature of Business</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Products">Products</div>
+						</th>
+						<th class="" scope="col">
+							<div class="slds-truncate" title="Sale to Customers Rs Lacs">Sale to Customers Rs Lacs</div>
+						</th>
+					</tr>
+				</thead>   
+				<tbody>       
+					<c:DFAMainCustomers aura:id="CmpDFABankAccountId" lstDFAMainCustomers="{!v.objWrap.lstDFAMainCustomers}" Ishide="true"/>
+				</tbody>
+			</table>
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_xx-large" style= "margin-left: 3px; margin-right: 3px;">DOCUMENTS ATTACHED</h3>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					Copy of PAN 
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="PanCheckBox" label="" value="{!v.objWrap.objApp.Copy_of_PAN__c}" disabled="true"/>
+					<!--<lightning:input type="Checkbox" aura:id="PanCheckBox" label="" value="{!v.objWrap.objApp.Copy_of_PAN__c}" onchange="{!c.onCheckPan}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+				
+					<lightning:textarea type="text" label="Remarks for Copy of PAN" value="{!v.objWrap.objApp.Remarks_for_Copy_of_PAN__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					KYC of Business Entity
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="KYCCheckBox" label="" value="{!v.objWrap.objApp.KYC_of_Business_Entity__c}" disabled="true"/>
+					<!--<lightning:input type="Checkbox" aura:id="KYCCheckBox" label="" value="{!v.objWrap.objApp.KYC_of_Business_Entity__c}" onchange="{!c.onCheckKYC}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:textarea type="text" label="Remarks for KYC of Business Entity" value="{!v.objWrap.objApp.Remarks_for_KYC_of_Business_Entity__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					KYC of Prop/Partner/Director
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="KYCDirectorCheckBox" label="" value="{!v.objWrap.objApp.KYC_of_Prop_Partner_Director__c}" disabled="true"/>
+					<!--<lightning:input type="Checkbox" aura:id="KYCDirectorCheckBox" label="" value="{!v.objWrap.objApp.KYC_of_Prop_Partner_Director__c}" onchange="{!c.onCheckKYCDirector}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:textarea type="text" label="Remarks for KYC of Prop/Partner/Director" value="{!v.objWrap.objApp.Remarks_for_KYC_of_Prop_Partner_Director__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					Copy of TIN RC/GST Reg.
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="TINRCCheckBox" label="" value="{!v.objWrap.objApp.Copy_of_TIN_RC_GST_Reg__c}" disabled="true"/>
+					<!--<lightning:input type="Checkbox" label="" value="{!v.objWrap.objApp.Copy_of_TIN_RC_GST_Reg__c}" aura:id="TINRCCheckBox" onchange="{!c.onCheckTINRC}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:textarea type="text" label="Remarks for Copy of TIN RC/GST Reg." value="{!v.objWrap.objApp.Remarks_for_Copy_of_TIN_RC_GST_Reg__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					Copy of Bank Statement
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="BankStatementCheckBox" label="" value="{!v.objWrap.objApp.Copy_of_Bank_Statement__c}" disabled="true"/>
+					<!--<lightning:input type="Checkbox" label="" value="{!v.objWrap.objApp.Copy_of_Bank_Statement__c}" aura:id="BankStatementCheckBox" onchange="{!c.onCheckBankStatement}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:textarea type="text" label="Remarks for Copy of Bank Statement" value="{!v.objWrap.objApp.Remarks_for_Copy_of_Bank_Statement__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					Copy of ITR
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="ITRCheckBox" label="" value="{!v.objWrap.objApp.Copy_of_ITR__c}" disabled="true"/>
+					<!--<lightning:input type="Checkbox" label="" value="{!v.objWrap.objApp.Copy_of_ITR__c}" aura:id="ITRCheckBox" onchange="{!c.onCheckITR}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:textarea type="text" label="Remarks for Copy of ITR" value="{!v.objWrap.objApp.Remarks_for_Copy_of_ITR__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					Security Cheque along with covering letter.
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="SecurityChequeCheckBox" label="" value="{!v.objWrap.objApp.Security_Cheque_along_with_covering_lett__c}" disabled="true"/>
+					<!--<lightning:input type="Checkbox" label="" value="{!v.objWrap.objApp.Security_Cheque_along_with_covering_lett__c	}" aura:id="SecurityChequeCheckBox" onchange="{!c.onCheckSecurityCheque}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:textarea type="text" label="Remarks for security cheque along with covering letter." value="{!v.objWrap.objApp.Remarks_for_Security_Cheque_along_with_c__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+					Copy of last 2 yr balance sheet self attested
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+					<ui:inputCheckbox aura:id="lastyrbalanceCheckBox" label="" value="{!v.objWrap.objApp.Copy_of_last_2_yr_balance_sheet_self_att__c}" disabled="true"/>
+						
+					<!--<lightning:input type="Checkbox" label="" value="{!v.objWrap.objApp.Copy_of_last_2_yr_balance_sheet_self_att__c}" aura:id="lastyrbalanceCheckBox" onchange="{!c.onChecklastyrbalance}"/>-->
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:textarea type="text" label="Remarks for Copy of last 2 yr balance sheet self attested" value="{!v.objWrap.objApp.Remarks_for_Copy_of_last_2_yr_balance_sh__c}" disabled="true"/>
+				</div>
+			</div>
+			
+			
+			<h3 class="slds-section-title--divider slds-m-left_medium slds-m-top_xx-large" style= "margin-left: 3px; margin-right: 3px;">Product Details</h3>
+			
+			<div class="slds-grid slds-wrap slds-m-left_xx-large slds-m-right_xx-large">
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+					<lightning:dualListbox aura:id="selectGenre"
+                               name="Genre"
+                               label="Expected Products to be Ordered"
+                               sourceLabel="Available"
+                               selectedLabel="Chosen"
+                               options="{!v.lstProductType}"
+                               value="{!v.selectedProductType}"
+                               onchange="{!c.handleGenreChange}" disabled="true"/>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12">
+				
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</aura:component>

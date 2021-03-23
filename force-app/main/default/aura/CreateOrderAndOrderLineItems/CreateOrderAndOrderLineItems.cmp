@@ -1,0 +1,112 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" controller="CreateOrderAndOrderLineItemsCtrl">
+	<aura:attribute name="showSpinner" type="boolean" description="" default="false"/> 
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="objWrap" type="object" />
+	<aura:attribute name="showPricebook" type="boolean" default="true"/>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:attribute name="PriceBookName" type="String" />
+	<aura:attribute name="strProduct" type="String" />
+	<aura:attribute name="SelectedProduct" type="string" default=""/>
+	<aura:attribute name="OnSelectProduct" type="string" default=""/>
+	<aura:attribute name="strContact" type="string" default=""/>
+	<aura:attribute name="strAccountName" type="string" default=""/>
+	<aura:attribute name="strOrderBy" type="string" default=""/>
+	
+    <aura:html tag="style">
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }       
+        .slds-modal__content{
+            overflow-y:hidden !important;
+            height:unset !important;
+            max-height:unset !important;
+        }
+        .slds-modal__container{
+        	margin: 0 auto;
+            width: 90%;
+            max-width: 75rem;
+            min-width: 65rem;
+        }
+		.slds-m-vertical--large{
+			margin-top :0rem;
+		}
+    </aura:html>
+    
+	<div class="slds-has-divider--top slds-m-vertical--large slds-grid--pull-padded-medium">
+		<aura:if isTrue="{!v.showSpinner}">
+			<lightning:spinner alternativeText="Loading" variant="brand" />
+		</aura:if>
+		<div class="slds-modal__header">
+			<h2 class="slds-text-heading--medium">
+				<div>
+					<b>Add Products</b>
+				</div>
+			</h2>
+		</div>
+		<div class="slds-grid slds-wrap">
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-small-size_1-of-12 slds-large-size_1-of-12">
+				
+			</div>
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-12 slds-small-size_5-of-12 slds-large-size_5-of-12">
+				<lightning:input type="text" value="{!v.strAccountName}" label="Retailer/Distributor Name" disabled="true" class="slds-p-around_x-small"/>
+			</div>
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-12 slds-small-size_5-of-12 slds-large-size_5-of-12">
+				<lightning:input type="text" aura:id="txtField" value="{!v.strContact}" label="Order Given By" class="slds-p-around_x-small"/>
+			</div>
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-small-size_1-of-12 slds-large-size_1-of-12">
+				
+			</div>
+		</div>
+		<br/>
+		<div class="slds-grid slds-wrap" >
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-small-size_1-of-12 slds-large-size_1-of-12">
+				
+			</div>
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-small-size_10-of-12 slds-large-size_10-of-12">
+				<div class="slds-grid slds-wrap slds-scrollable_y" style="height:20rem;">
+					<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th class="" scope="col">
+								<div class="slds-truncate" title="Product Name">Product Name</div>
+								</th>
+								<th class="" scope="col">
+								<div class="slds-truncate" title="Order Value">Order Value</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<aura:iteration items="{!v.objWrap.lstProduct}" var="objP" indexVar="index">
+								<tr class="slds-hint-parent">
+									<td data-label="Product Name" scope="row">
+										<div class="slds-truncate" title="{!objP.objproduct.Name}">
+										  {!objP.objproduct.Name}
+										</div>
+									</td>
+									<td data-label="Order Value">
+										<div class="slds-truncate" title="Order Value">
+										  <lightning:input type="Number" aura:id="IdOrdervalueAmount" value="{!objP.OrdervalueAmount}" label="" variant="label-hidden" min="0" step="0.01" placeholder="0.00"/>
+											
+										</div>
+									</td>
+								</tr>
+							</aura:iteration>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12 slds-small-size_1-of-12 slds-large-size_1-of-12">
+				
+			</div>
+		</div>
+			
+		<div class="slds-modal__footer slds-m-top_small">
+			<center><lightning:button label="Cancel" onclick="{!c.CancelOrder}"/>
+			<lightning:button aura:id="button" variant="brand" label="Save" onclick="{!c.CreateOrder}"/></center>
+		</div>
+	
+	</div>
+</aura:component>

@@ -1,0 +1,8 @@
+<aura:component controller="LtngCheckInOutControllerlead" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction,force:appHostable" access="global">
+    <aura:attribute name="showSpinner" type="boolean" description="" default="false"/> 
+    <aura:handler name="init" value="{! this }" action="{! c.checkGeoLocation }"/>
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" variant="brand" />
+    </aura:if>
+</aura:component>

@@ -1,0 +1,224 @@
+<apex:page standardController="Meeting_Event__c" extensions="EventInformationController" renderAs="Pdf" showHeader="false">
+    <head>
+
+        <style type="text/css">
+            @page {  
+                 size:11.54in 13.50in;
+                 margin-top: 3.00cm;
+                 margin-bottom: 2.50cm;               
+                 @top-center {                   
+                        content: element(header);               
+                 }
+                 @bottom-left {
+                        content: element(footer);
+                 }           
+            }                       
+         
+            div.header {                
+                padding: 5px;              
+                position: running(header);           
+            }           
+            div.footer {                
+                display: block;             
+                padding: 5px;               
+                position: running(footer);          
+            }                       
+ 
+            .pagenumber:before {                
+                content: counter(page);             
+            }                       
+            .pagecount:before {             
+                content: counter(pages);            
+            }     
+            .column {
+              float: left;
+              width: 45%;
+            }
+
+            /* Clear floats after the columns */
+            .row {
+                 width: 100%;
+            }
+        </style> 
+    </head>
+    <apex:form >
+        <apex:pageblock >
+            <div class="header">
+                <div style="width:100%;"> 
+                    <center> <h2>Meeting Details</h2></center>
+                </div>
+            </div>
+            <br/>
+                <table style="width:100%;">
+                    <tr>
+                        <td style="width:24%;">
+                            <b>Subject </b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                            {!objMeeting.Name}
+                        </td>
+                        <td style="width:24%;"> 
+                            <b>Start Date &amp; Time</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                        <apex:outputText value="{0,date,dd MMM YYYY h:mm a}">
+                          <apex:param value="{!objMeeting.Start_Datetime__c}"/>
+                        </apex:outputText>
+                            
+                        </td>
+                    </tr>
+                    <tr>                
+                        <td style="width:24%;">
+                            <b>Retailer</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                           {!objMeeting.Retailer_Distributor__r.Name}
+                        </td>
+                        <td style="width:24%;">
+                            <b>Distributor</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        
+                        <td style="width:24%;">
+                            {!objMeeting.Distributor__c}
+                        </td>
+                    </tr>
+                    <tr>    
+                        <td style="width:24%;">
+                            <b>No of Electrician to be attended</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                           {!objMeeting.No_of_Electricians_to_be_attended__c}
+                        </td>
+                        <td style="width:24%;">
+                            <b>Last meet with this retailer</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                        <apex:outputText value="{0,date,dd MMM YYYY h:mm a}">
+                          <apex:param value="{!dtdatetime}"/>
+                        </apex:outputText>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:24%;">
+                            <b>Amount required for meet</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                           {!objMeeting.Amount_required_for_meet__c} INR
+                        </td>
+                        <td style="width:24%;">
+                            <b>Actual Amount Spent</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                           {!objMeeting.Actual_Amount_Spent__c} INR
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="width:24%;">
+                            <b>Event Address</b>
+                        </td>
+                        <td style="width:2%;">
+                            <b>: </b>
+                        </td>
+                        <td style="width:24%;">
+                             {!objMeeting.Address__c}
+                        </td>
+                        <td style="width:24%;">
+                            
+                        </td>
+                        <td style="width:2%;">
+                           
+                        </td>
+                        <td style="width:24%;">
+                            
+                        </td>
+                    </tr>
+                    
+                </table>
+                <br/><br/>
+            <apex:outputPanel id="panel1" rendered="{!isElectricianRecordType}">
+                <table style="border: 1px solid black; width:100%;">
+                    <thead>
+                        <tr>
+                            <th style="border-right: 0.5px solid black;">Electrician Name </th>
+                            <th style="border-right: 0.5px solid black;">Electrician Contact No</th>
+                            <th>Date of Birth</th>
+                        </tr>
+                    </thead>  
+                    <apex:repeat value="{!lstMeetingAttendees}" var="MeetingA">
+                        <tbody>
+                            <tr>
+                                <td style="border-top: 0.5px solid black;border-right: 0.5px solid black;">
+                                  <apex:outputField value="{!MeetingA.Contact__r.Name}"/>
+                                </td>
+                                <td style="border-top: 0.5px solid black; border-right: 0.5px solid black;">
+                                  <apex:outputField value="{!MeetingA.Contact_Number__c}"/>
+                                </td>
+                                <td style="border-top: 0.5px solid black;">
+                                  <apex:outputField value="{!MeetingA.Date_Of_Birth__c}"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </apex:repeat>
+                </table> 
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!!isElectricianRecordType}">
+                <table style="border: 1px solid black; width:100%;">
+                    <thead>
+                        <tr>
+                            <th style="border-right: 0.5px solid black;">Retailer Name </th>
+                            <th style="border-right: 0.5px solid black;">Shop Name</th>
+                            <th style="border-right: 0.5px solid black;">Retailer Contact No</th>
+                            <th>Date of Birth</th>
+                        </tr>
+                    </thead>  
+                    <apex:repeat value="{!lstMeetingAttendees}" var="MeetingA">
+                        <tbody>
+                            <tr>
+                                <td style="border-top: 0.5px solid black;border-right: 0.5px solid black;">
+                                  <apex:outputField value="{!MeetingA.Contact__r.Name}"/>
+                                </td>
+                                <td style="border-top: 0.5px solid black; border-right: 0.5px solid black;">
+                                  <apex:outputField value="{!MeetingA.Contact__r.Account.Name}"/>
+                                </td>
+                                <td style="border-top: 0.5px solid black; border-right: 0.5px solid black;">
+                                  <apex:outputField value="{!MeetingA.Contact_Number__c}"/>
+                                </td>
+                                
+                                <td style="border-top: 0.5px solid black;">
+                                  <apex:outputField value="{!MeetingA.Date_Of_Birth__c}"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </apex:repeat>
+                </table> 
+            </apex:outputPanel>
+        </apex:pageblock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,44 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="AddMultipleRowCtrl">
+	<aura:attribute name="lstDFAOther" type="List"/>    
+	<aura:attribute name="lstTypeofBusinessPlacevalue" type="List"/>    
+	<aura:attribute name="lstBusinessPlaceTypevalue" type="List"/> 
+    <aura:attribute name="Ishide" type="boolean" description=""/> 
+    
+		<aura:iteration items="{!v.lstDFAOther}" var="item" indexVar="index">
+			<tr class="slds-text-title_caps" data-row-index="{!index}">
+				<td> 
+					<lightning:select label="" value="{!item.Type_of_Business_Place__c}" disabled="{!v.Ishide}">
+						<aura:iteration items="{!v.lstTypeofBusinessPlacevalue}" var="val" >
+							<option value="{!val}"> {!val}</option>
+						</aura:iteration>
+					</lightning:select>
+				</td>
+				<td>
+					<lightning:input type="text" label="" value="{!item.Address__c}" disabled="{!v.Ishide}"/>
+				</td>
+				<td>
+					<lightning:input type="text" label="" value="{!item.Year_of_Estl__c}" maxlength="4" disabled="{!v.Ishide}"/>
+				</td>
+				<td>
+					<lightning:select label="" value="{!item.Business_Place_Type__c}" disabled="{!v.Ishide}">
+						<aura:iteration items="{!v.lstBusinessPlaceTypevalue}" var="val">
+							<option value="{!val}"> {!val}</option>
+						</aura:iteration>
+					</lightning:select>
+				</td>
+				<td>
+				<aura:if isTrue="{!!v.Ishide}">
+					<div class="slds-truncate" title="Action">
+						<aura:if isTrue="{!index != 0 || v.lstDFAOther.length > 1}">
+							<lightning:buttonIcon value="{!index}" alternativeText="Remove Row" variant="border-filled"  iconName="utility:close"  onclick="{!c.removeRow}" class="AlignCenter" disabled="{!v.Ishide}"/>
+						</aura:if>
+						<aura:if isTrue="{!v.lstDFAOther.length == index+1}">
+							<lightning:buttonIcon value="index" alternativeText="Add Row" variant="border-filled"  iconName="utility:add"  onclick="{!c.AddNewRow}" class="AlignCenter" disabled="{!v.Ishide}"/>
+						</aura:if>
+					</div>
+               </aura:if>
+				</td>
+				
+			</tr>
+		</aura:iteration>
+</aura:component>

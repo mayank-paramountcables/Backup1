@@ -1,0 +1,34 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="AddMultipleRowCtrl">
+	<aura:attribute name="lstDFABank" type="List"/>
+    <aura:attribute name="Ishide" type="boolean" description=""/> 
+      
+		<aura:iteration items="{!v.lstDFABank}" var="item" indexVar="index">
+			<tr class="slds-text-title_caps" data-row-index="{!index}">
+				<td> 
+					<lightning:input type="text" label="" value="{!item.Bank_Name_Branch__c}" disabled="{!v.Ishide}"/>
+				</td>
+				<td>
+					<lightning:input type="text" label="" value="{!item.Account_No__c}" maxlength="20" disabled="{!v.Ishide}"/>
+				</td>
+				<td>
+					<lightning:input type="text" label="" value="{!item.Account_Type__c}" maxlength="50" disabled="{!v.Ishide}"/>
+				</td>
+				<td>
+					<lightning:input type="text" label="" value="{!item.IFSC_Code__c}" maxlength="10" disabled="{!v.Ishide}"/>
+				</td>
+				<td>
+				<aura:if isTrue="{!!v.Ishide}">
+					<div class="slds-truncate" title="Action">
+						<aura:if isTrue="{!index != 0 || v.lstDFABank.length > 1}">
+							<lightning:buttonIcon value="{!index}" alternativeText="Remove Row" variant="border-filled"  iconName="utility:close"  onclick="{!c.removeRow}" class="AlignCenter" disabled="{!v.Ishide}"/>
+						</aura:if>
+						<aura:if isTrue="{!v.lstDFABank.length == index+1}">
+							<lightning:buttonIcon value="index" alternativeText="Add Row" variant="border-filled"  iconName="utility:add"  onclick="{!c.AddNewRow}" class="AlignCenter" disabled="{!v.Ishide}"/>
+						</aura:if>
+					</div>
+                   </aura:if>
+				</td>
+				
+			</tr>
+		</aura:iteration>
+</aura:component>
